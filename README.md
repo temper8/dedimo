@@ -9,3 +9,8 @@ Now one command is enough:
 ```cmd
 wsl --cd ~/dedimo -e bash -c "source ~/.bashrc && conda run marimo edit"
 ```
+
+or simple:
+```bash
+conda run marimo edit
+```
