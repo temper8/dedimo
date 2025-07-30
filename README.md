@@ -1,5 +1,5 @@
 # Dedimo - ***Ded***alus and mar***imo***
-Dedalus examples adopted for marimo
+[Dedalus](https://dedalus-project.org/) examples adopted for [marimo](https://marimo.io)
 
 Once I discovered the amazing package Dedalus, but I could not run it under Windows. 
 The problem was solved with the help of WSL.
