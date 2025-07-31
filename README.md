@@ -7,7 +7,7 @@ But to make it convenient to work, I decided to add Marimo notebooks
 
 Now one command is enough:
 ```cmd
-wsl --cd ~/dedimo -e bash -c "source ~/.bashrc && conda run marimo edit"
+wsl --cd ~/dedimo -e bash -c "source ~/.bashrc && marimo edit"
 ```
 
 or simple:
