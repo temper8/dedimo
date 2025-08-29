@@ -21,3 +21,9 @@ marimo edit
 2. install marimo `conda install marimo`
 3. install dedalus `conda install dedalus`
 4. clone this rep
+5. add to .bashrc line `export PATH="/home/user123/miniforge3/bin:$PATH"`
+
+Now you can run marimo from WSL
+```cmd
+wsl --cd ~/dedimo -e bash -c "source ~/.bashrc && marimo edit"
+```
