@@ -12,5 +12,12 @@ wsl --cd ~/dedimo -e bash -c "source ~/.bashrc && marimo edit"
 
 or simple:
 ```bash
-conda run marimo edit
+marimo edit
 ```
+
+## Installation on WSL
+
+1. install miniforge from https://github.com/conda-forge/miniforge
+2. install marimo `conda install marimo`
+3. install dedalus `conda install dedalus`
+4. clone this rep
