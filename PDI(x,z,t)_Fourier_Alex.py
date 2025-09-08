@@ -7,7 +7,7 @@ app = marimo.App(width="medium")
 @app.cell
 def _():
     import marimo as mo
-    return
+    return (mo,)
 
 
 @app.cell
@@ -25,8 +25,8 @@ def _():
 @app.cell
 def _():
     # Parameters
-    time_stop = 0.1
-    timestep = 0.01
+    time_stop = 3.0
+    timestep = 0.05
     Lx, Lz = 10, 10    # Размеры области
     Nx, Nz = 512, 16  # Разрешение сетки
     v0 = 0.5
@@ -170,6 +170,95 @@ def _(Nz, a_list, np, plt, t_list, x):
     #plt.legend()
     plt.show()
     return (cord_x,)
+
+
+@app.cell
+def _():
+    return
+
+
+@app.cell
+def _(a_list, np, plt, time_stop, timestep):
+    data2d = np.asarray([np.abs(_a[:,0]) for _a in a_list])
+    #data2d = np.sin(t)[:, np.newaxis] * np.cos(t)[np.newaxis, :]
+
+    fig, ax_2d = plt.subplots(figsize=(12, 4))
+    im = ax_2d.imshow(data2d)
+    ax_2d.set_title(f'Amp(a(x,z=0,t)), t =[0, {timestep}, {time_stop}],')
+
+    fig.colorbar(im, ax=ax_2d, label='Interactive colorbar')
+
+    plt.show()
+    return (data2d,)
+
+
+@app.cell
+def _(data2d):
+    nt, nx = data2d.shape
+    return nt, nx
+
+
+@app.cell
+def _(mo, nt):
+    time_slider = mo.ui.slider(start=0, stop=nt-1, label="Time", value=0)
+    return (time_slider,)
+
+
+@app.cell
+def _(a_list, cord_x, mo, np, plt, t_list, time_slider):
+    def render_plot():
+        fig, ax = plt.subplots(figsize=(12, 4))
+        #i_z = int(Nz/2)
+        _a = a_list[time_slider.value]
+        _t = t_list[time_slider.value]
+        fig.suptitle(f't= {_t}')
+        ax.plot(cord_x, np.abs(_a[:,0]), label=f"t = {_t}")
+        #plt.xlim(0, Lx)
+        #plt.ylim(0, time_stop)
+
+        #ax.set_aspect('equal')
+        ax.set_xlabel('X')
+        ax.set_ylabel('Amp(a)');
+        return mo.as_html(ax)
+    return (render_plot,)
+
+
+@app.cell
+def _(mo, render_plot, time_slider):
+    mo.vstack([render_plot(), mo.hstack([time_slider, mo.md(f"Has value: {time_slider.value}")])])
+    return
+
+
+@app.cell
+def _(nt, nx):
+    nt, nx
+    return
+
+
+@app.cell
+def _(data2d, np, nt, nx, plt):
+    fig_3d, ax_3d = plt.subplots(subplot_kw={"projection": "3d"}, figsize=(8, 8))
+
+    xx = range(nx) # np.arange(-Lx, Lx, 2*Lx/nx)
+    yy = range(nt) #np.arange(0, time_stop, timestep)
+    X, Y = np.meshgrid(xx, yy)
+
+    #X, Y = coords.cartesian(phi, r)
+    # Default behavior is axlim_clip=False
+    ax_3d.plot_wireframe(X, Y, data2d, edgecolor='royalblue', lw=0.5, rstride=8, cstride=8,
+                    alpha=0.9)
+
+    # When axlim_clip=True, note that when a line segment has one vertex outside
+    # the view limits, the entire line is hidden. The same is true for 3D patches
+    # if one of their vertices is outside the limits (not shown).
+    #ax_3d.plot_wireframe(X, Y, Z, color='C1', axlim_clip=True)
+
+    # In this example, data where x < 0 or z > 0.5 is clipped
+    #ax_3d.set(xlim=(0, 10), ylim=(-5, 5), zlim=(-1, 0.5))
+    ax_3d.legend(['axlim_clip=False (default)', 'axlim_clip=True'])
+
+    plt.show()
+    return
 
 
 @app.cell
